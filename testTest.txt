@@ -1,0 +1,1 @@
+test for access rights
