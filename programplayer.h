@@ -1,6 +1,7 @@
 #ifndef PROGRAMPLAYER_H
 #define PROGRAMPLAYER_H
-
+#include <QString>
+#include <QObject>
 
 struct audio_task
 {
