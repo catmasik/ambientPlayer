@@ -1,0 +1,19 @@
+#include <QObject>
+#include "playersdirector.h"
+
+class playersDirector {
+
+
+    playersDirector::playersDirector (audio_task *task)
+    {
+
+    }
+
+
+    playersDirector::~playersDirector()
+    {
+
+    }
+
+
+};

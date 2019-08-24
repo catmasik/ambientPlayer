@@ -27,11 +27,13 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    programPlayer.cpp
+    programPlayer.cpp \
+    playersdirector.cpp
 
 HEADERS += \
         mainwindow.h \
-    programplayer.h
+    programplayer.h \
+    playersdirector.h
 
 FORMS += \
         mainwindow.ui
