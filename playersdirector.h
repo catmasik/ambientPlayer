@@ -2,6 +2,7 @@
 #define PLAYERSDIRECTOR_H
 
 #include <QObject>
+#include  "programplayer.h"
 
 class playersDirector : public QObject {
     Q_OBJECT
@@ -9,8 +10,11 @@ class playersDirector : public QObject {
 public:
     playersDirector();
     ~playersDirector();
-};
+    QVector<audio_task>* loadPlayersArray(QString file_name);
+    void runPleyers();
 
+
+};
 
 
 #endif // PLAYERSDIRECTOR_H
