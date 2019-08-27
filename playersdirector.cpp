@@ -20,7 +20,7 @@ playersDirector::~playersDirector()
 }
 
 
-void playersDirector::runPleyers(){
+void playersDirector::createPleyers(){
 
     QVector<audio_task> tasks_vector;
     QString file_name = "program_player.cfg";
@@ -30,12 +30,19 @@ void playersDirector::runPleyers(){
         progamPlayer* cur_player = new progamPlayer(&cur_task);
         QThread* thread = new QThread;
         cur_player->moveToThread(thread);
+        connect(this, SIGNAL(playAllPlayers()), cur_player, SLOT(play()));
+
     }
-
-
 }
-
-
+void play(){
+    emit  playAllPlayers();
+}
+void pause(){
+    emit  pauseAllPlayers();
+}
+void stop(){
+    emit  stopAllPlayers();
+}
 
 QVector<audio_task> playersDirector::loadPlayersArray(QString file_name)
 {

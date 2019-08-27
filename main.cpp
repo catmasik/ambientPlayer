@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "playersdirector.h"
 #include <QApplication>
 
 #include <QTimer>
@@ -13,7 +14,7 @@ int main(int argc, char *argv[])
 
     /*ctms_audio_stream test_stream;
     test_stream.volume = 10;
-    test_stream.audio_file_path = "c:/Downloads/5844_Raim_Davletyaro.mp3";
+    test_stream.audio_file_path = "c:/Downloads/tyaro.mp3";
 
     QStringList list1 = str.split(",");*/
 
@@ -22,38 +23,18 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
+    playersDirector* pd = new playersDirector();
+    pd->createPleyers();
+    pd->play();
 
 
-    /*
-запускаем таймер
-
-
-
-
-
-
-    */
-
-    QTimer::singleShot(6000, &app, SLOT(quit()));
-    lineEdit.setText("");
-
-
-    QMediaPlaylist *playlist = new QMediaPlaylist();
-    playlist->addMedia(QUrl::fromLocalFile("c:/Downloads/alina_grosu_-_vova_stopmusic.net.mp3"));
+    /*QMediaPlaylist *playlist = new QMediaPlaylist();
+    playlist->addMedia(QUrl::fromLocalFile("c:/Downloads/tyaro.mp3"));
     playlist->setPlaybackMode(QMediaPlaylist::Loop);
     QMediaPlayer *player = new QMediaPlayer();
     player->setPlaylist(playlist);
     player->setVolume(5);
-    player->play();
-
-
-
-
-
-
-
-
-
+    player->play();*/
 /*
 
     QDir cur_dir = QDir::currentPath();
@@ -61,7 +42,7 @@ int main(int argc, char *argv[])
     QFile inputFile(fileName);
 
 
-    /*if(QFileInfo::exists(fileName))
+    if(QFileInfo::exists(fileName))
     {
         qDebug () << "file exists" << endl;
     }*/
@@ -126,17 +107,7 @@ int main(int argc, char *argv[])
       player2->play();
 */
     return a.exec();
-   //return 0;
+
 }
 
-/*
 
-запуск запрограммированных плееров делается по  таймауту QThread;
-QThread::sleep(unsigned int)
-The QTimer class provides repetitive and single-shot timers.
-после выполнения проигрывания файла ловим сигнал void QMediaPlayer::mediaStatusChanged(QMediaPlayer::MediaStatus status)
-
-
-
-
-*/

@@ -13,12 +13,17 @@ struct audio_task
 };
 
 
-class progamPlayer : public QObject {
+class progamPlayer : public QObject {  /* врапер мультимедиа-плеера */
     Q_OBJECT
 
 public:
     progamPlayer(audio_task *task);
     ~progamPlayer();
+
+public slots:
+   void play();
+   void stop();
+   void pause();
 
 };
 
