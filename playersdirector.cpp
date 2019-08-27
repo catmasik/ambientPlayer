@@ -34,13 +34,13 @@ void playersDirector::createPleyers(){
 
     }
 }
-void play(){
+void playersDirector::play(){
     emit  playAllPlayers();
 }
-void pause(){
+void playersDirector::pause(){
     emit  pauseAllPlayers();
 }
-void stop(){
+void playersDirector::stop(){
     emit  stopAllPlayers();
 }
 
