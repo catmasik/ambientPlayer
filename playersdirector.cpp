@@ -21,20 +21,23 @@ playersDirector::~playersDirector()
 
 
 void playersDirector::createPleyers(){
-
+    qDebug () << "director create players" << endl;
     QVector<audio_task> tasks_vector;
     QString file_name = "program_player.cfg";
-    tasks_vector = loadPlayersArray(file_name);
+    tasks_vector = playersDirector::loadPlayersArray(file_name);
 
     foreach( audio_task cur_task, tasks_vector ){
+         qDebug () << "create player" << endl;
         progamPlayer* cur_player = new progamPlayer(&cur_task);
         QThread* thread = new QThread;
         cur_player->moveToThread(thread);
         connect(this, SIGNAL(playAllPlayers()), cur_player, SLOT(play()));
-
+        connect(this, SIGNAL(pauseAllPlayers()), cur_player, SLOT(pause()));
+        connect(this, SIGNAL(stopAllPlayers()), cur_player, SLOT(stop()));
     }
 }
 void playersDirector::play(){
+    qDebug () << "director switch play all players" << endl;
     emit  playAllPlayers();
 }
 void playersDirector::pause(){
@@ -50,10 +53,10 @@ QVector<audio_task> playersDirector::loadPlayersArray(QString file_name)
     QString fileName = cur_dir.filePath(file_name);
     QFile inputFile(fileName);
 
-    if(QFileInfo::exists(fileName))
+    /*if(QFileInfo::exists(fileName))
     {
         qDebug () << "file exists" << endl;
-    }
+    }*/
     QVector<audio_task> stream_vector;
     if (inputFile.open(QIODevice::ReadOnly))
     {

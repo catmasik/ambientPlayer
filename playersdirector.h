@@ -17,7 +17,7 @@ public:
     void stop();
 signals:
    void playAllPlayers();
-   void pausePlayers();
+   void pauseAllPlayers();
    void stopAllPlayers();
 
 };

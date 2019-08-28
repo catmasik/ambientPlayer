@@ -11,7 +11,7 @@
 int main(int argc, char *argv[])
 {
 
-
+    qDebug () << "start program" << endl;
     /*ctms_audio_stream test_stream;
     test_stream.volume = 10;
     test_stream.audio_file_path = "c:/Downloads/tyaro.mp3";
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     playersDirector* pd = new playersDirector();
     pd->createPleyers();
     pd->play();
-
+    pd->stop();
 
     /*QMediaPlaylist *playlist = new QMediaPlaylist();
     playlist->addMedia(QUrl::fromLocalFile("c:/Downloads/tyaro.mp3"));
