@@ -3,27 +3,24 @@
 #include <QMediaPlayer>
 #include <QDir>
 #include <QUrl>
+#include <QDebug>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow ( QWidget* parent ) :
+  QMainWindow ( parent ),
+  ui ( new Ui::MainWindow )
 {
-    ui->setupUi(this);
+  qDebug () << "-> " << __PRETTY_FUNCTION__;
+  ui->setupUi ( this );
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+  qDebug () << "-> " << __PRETTY_FUNCTION__;
+  delete ui;
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-
-   /* QMediaPlayer *player = nullptr;
-    player = new QMediaPlayer;
-    player->setMedia(QUrl::fromLocalFile("c:/Downloads/5844_Raim_Davletyaro.mp3"));
-    player->setVolume(50);
-    player->play();*/
-
+  qDebug () << "-> " << __PRETTY_FUNCTION__;
 
 }
