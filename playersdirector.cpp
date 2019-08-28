@@ -29,11 +29,12 @@ void playersDirector::createPleyers(){
     foreach( audio_task cur_task, tasks_vector ){
          qDebug () << "create player" << endl;
         progamPlayer* cur_player = new progamPlayer(&cur_task);
-        QThread* thread = new QThread;
-        cur_player->moveToThread(thread);
         connect(this, SIGNAL(playAllPlayers()), cur_player, SLOT(play()));
         connect(this, SIGNAL(pauseAllPlayers()), cur_player, SLOT(pause()));
         connect(this, SIGNAL(stopAllPlayers()), cur_player, SLOT(stop()));
+        QThread* thread = new QThread;
+        cur_player->moveToThread(thread);
+        thread->start();
     }
 }
 void playersDirector::play(){
@@ -44,6 +45,7 @@ void playersDirector::pause(){
     emit  pauseAllPlayers();
 }
 void playersDirector::stop(){
+    qDebug () << "director switch stop all players" << endl;
     emit  stopAllPlayers();
 }
 
