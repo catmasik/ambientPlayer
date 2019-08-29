@@ -24,7 +24,7 @@ int main ( int argc, char* argv[] )
 
   pd->createPleyers();
   pd->play();
-  pd->stop();
+  //pd->stop();
 
   return a.exec();
 

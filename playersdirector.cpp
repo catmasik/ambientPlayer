@@ -92,8 +92,8 @@ QVector<audio_task> playersDirector::loadPlayersArray ( QString file_name )
       audio_task cur_stream; // инициализируем структуры для хранения задач
       cur_stream.audio_file_path = cur_param_arr[0];
       cur_stream.repeatability = cur_param_arr[1].toInt();
-      cur_stream.first_delay = cur_param_arr[2].toInt();
-      cur_stream.delay = cur_param_arr[3].toInt();
+      cur_stream.first_delay = cur_param_arr[2].toULong();
+      cur_stream.delay = cur_param_arr[3].toULong();
       cur_stream.volume = cur_param_arr[4].toInt();
       stream_vector.append ( cur_stream );
       //int temp = 0;
