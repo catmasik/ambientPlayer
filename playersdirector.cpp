@@ -21,7 +21,6 @@ playersDirector::~playersDirector()
 
 }
 
-
 void playersDirector::createPleyers()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
@@ -30,16 +29,16 @@ void playersDirector::createPleyers()
   QString file_name = "program_player.cfg";
   tasks_vector = playersDirector::loadPlayersArray ( file_name );
 
-  foreach ( audio_task cur_task, tasks_vector )
-  {
-    qDebug () << "create player" << endl;
-    progamPlayer* cur_player = new progamPlayer ( &cur_task );
-    QThread* thread = new QThread;
-    cur_player->moveToThread ( thread );
-    connect ( this, SIGNAL ( playAllPlayers() ), cur_player, SLOT ( play() ) );
-    connect ( this, SIGNAL ( pauseAllPlayers() ), cur_player, SLOT ( pause() ) );
-    connect ( this, SIGNAL ( stopAllPlayers() ), cur_player, SLOT ( stop() ) );
-  }
+ foreach( audio_task cur_task, tasks_vector ){
+         qDebug () << "create player" << endl;
+        progamPlayer* cur_player = new progamPlayer(&cur_task);
+        connect(this, SIGNAL(playAllPlayers()), cur_player, SLOT(play()));
+        connect(this, SIGNAL(pauseAllPlayers()), cur_player, SLOT(pause()));
+        connect(this, SIGNAL(stopAllPlayers()), cur_player, SLOT(stop()));
+        QThread* thread = new QThread;
+        cur_player->moveToThread(thread);
+        thread->start();
+    }
 }
 void playersDirector::play()
 {
@@ -52,10 +51,12 @@ void playersDirector::pause()
   qDebug () << "-> " << __PRETTY_FUNCTION__;
   emit  pauseAllPlayers();
 }
+
 void playersDirector::stop()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
   emit  stopAllPlayers();
+
 }
 
 QVector<audio_task> playersDirector::loadPlayersArray ( QString file_name )
