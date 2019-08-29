@@ -20,6 +20,7 @@ class progamPlayer : public QObject    /* врапер мультимедиа-п
 public:
   progamPlayer ( audio_task* task );
   ~progamPlayer();
+  audio_task* cur_task ;
 
 public slots:
   void play();

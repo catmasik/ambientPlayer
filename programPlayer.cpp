@@ -1,12 +1,13 @@
 #include <QObject>
 #include "programplayer.h"
 #include <QDebug>
-
+#include <QThread>
 
 
 progamPlayer::progamPlayer ( audio_task* task )
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
+  progamPlayer::cur_task = task;
 }
 
 
@@ -18,8 +19,9 @@ progamPlayer::~progamPlayer()
 
 void progamPlayer::play()
 {
-  qDebug () << "-> " << __PRETTY_FUNCTION__;
-  qDebug () << "player play" << endl;
+    QThread* cur_thread  =  QThread::currentThread();
+    cur_thread->msleep(5000);
+    qDebug () << "player play" << endl;
 }
 void progamPlayer::stop()
 {
