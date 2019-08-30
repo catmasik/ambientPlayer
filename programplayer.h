@@ -19,9 +19,9 @@ class progamPlayer : public QObject    /* врапер мультимедиа-п
   Q_OBJECT
 
 public:
-  progamPlayer ( audio_task* task );
+  progamPlayer ( audio_task task );
   ~progamPlayer();
-  audio_task* cur_task ;
+  audio_task cur_task ;
   QMediaPlayer *player;
   QMediaPlaylist *playlist;
 
