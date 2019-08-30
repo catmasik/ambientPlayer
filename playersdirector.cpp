@@ -29,7 +29,7 @@ void playersDirector::createPleyers()
   QString file_name = "program_player.cfg";
   tasks_vector = playersDirector::loadPlayersArray ( file_name );
 
- foreach( audio_task cur_task, tasks_vector ){
+  foreach( audio_task cur_task, tasks_vector ){
          qDebug () << "create player" << endl;
         progamPlayer* cur_player = new progamPlayer(cur_task);
         connect(this, SIGNAL(playAllPlayers()), cur_player, SLOT(play()));
@@ -38,7 +38,8 @@ void playersDirector::createPleyers()
         QThread* thread = new QThread;
         cur_player->moveToThread(thread);
         thread->start();
-    }
+        break;
+  }
 }
 void playersDirector::play()
 {

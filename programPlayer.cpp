@@ -25,13 +25,13 @@ void progamPlayer::play()
   qDebug () << "player first pausa"+ QString::number(this->cur_task.first_delay) << endl;
   cur_thread->msleep(this->cur_task.first_delay);
   qDebug () << "player play" << endl;
-  progamPlayer::playlist = new QMediaPlaylist();
-  progamPlayer::playlist->addMedia(QUrl::fromLocalFile(this->cur_task.audio_file_path));
-  progamPlayer::playlist->setPlaybackMode(QMediaPlaylist::Loop);
-  progamPlayer::player = new QMediaPlayer();
-  progamPlayer::player->setPlaylist(playlist);
-  progamPlayer::player->setVolume(this->cur_task.volume);
-  progamPlayer::player->play();
+  this->playlist = new QMediaPlaylist();
+  this->playlist->addMedia(QUrl::fromLocalFile(this->cur_task.audio_file_path));
+  this->playlist->setPlaybackMode(QMediaPlaylist::Loop);
+  this->player = new QMediaPlayer();
+  this->player->setPlaylist(playlist);
+  this->player->setVolume(this->cur_task.volume);
+  this->player->play();
 
 }
 void progamPlayer::stop()
