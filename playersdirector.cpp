@@ -28,7 +28,7 @@ void playersDirector::createPleyers()
   QVector<audio_task> tasks_vector;
   QString file_name = "program_player.cfg";
   tasks_vector = playersDirector::loadPlayersArray ( file_name );
-
+  int loop_cnt = 0;
   foreach( audio_task cur_task, tasks_vector ){
          qDebug () << "create player" << endl;
         progamPlayer* cur_player = new progamPlayer(cur_task);
@@ -38,7 +38,9 @@ void playersDirector::createPleyers()
         QThread* thread = new QThread;
         cur_player->moveToThread(thread);
         thread->start();
-        break;
+        loop_cnt++;
+        //if(loop_cnt==2){continue;}
+
   }
 }
 void playersDirector::play()

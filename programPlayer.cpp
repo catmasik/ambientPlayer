@@ -29,7 +29,7 @@ void progamPlayer::play()
   this->playlist->addMedia(QUrl::fromLocalFile(this->cur_task.audio_file_path));
   this->playlist->setPlaybackMode(QMediaPlaylist::Loop);
   this->player = new QMediaPlayer();
-  this->player->setPlaylist(playlist);
+  this->player->setPlaylist(this->playlist);
   this->player->setVolume(this->cur_task.volume);
   this->player->play();
 
