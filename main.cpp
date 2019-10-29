@@ -20,9 +20,9 @@ int main ( int argc, char* argv[] )
   MainWindow w;
   w.show();
 
-  QScopedPointer<playersDirector> pd ( new playersDirector () );
+  QScopedPointer<PlayersDirector> pd ( new PlayersDirector () );
 
-  pd->createPleyers();
+  pd->createPlayers();
   pd->play();
   //pd->stop();
 

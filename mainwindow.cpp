@@ -11,16 +11,18 @@ MainWindow::MainWindow ( QWidget* parent ) :
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
   ui->setupUi ( this );
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
 
 MainWindow::~MainWindow()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
   delete ui;
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
 
 void MainWindow::on_pushButton_clicked()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
-
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }

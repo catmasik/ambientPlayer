@@ -4,43 +4,49 @@
 #include <QThread>
 
 
-progamPlayer::progamPlayer ( audio_task task )
+SingleSoundPlayer::SingleSoundPlayer ( AudioTaskConfig task )
+  : m_task ( task )
+  , m_playlist ( new QMediaPlaylist() )
+  , m_player ( new QMediaPlayer() )
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
   //progamPlayer::cur_task = task;
-  this->cur_task = task;
+  m_playlist->addMedia ( QUrl::fromLocalFile ( m_task.audio_file_path ) );
+  m_playlist->setPlaybackMode ( QMediaPlaylist::Loop );
+  m_player->setPlaylist ( m_playlist.get() );
+  m_player->setVolume ( m_task.volume );
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
 
 
-progamPlayer::~progamPlayer()
+SingleSoundPlayer::~SingleSoundPlayer()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
+  m_player->stop();
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
 
 
-void progamPlayer::play()
+void SingleSoundPlayer::play()
 {
-  QThread* cur_thread  =  QThread::currentThread();
+  qDebug () << "-> " << __PRETTY_FUNCTION__;
   //qDebug () << "player first pausa"+ QString::number(progamPlayer::cur_task->first_delay) << endl;
-  qDebug () << "player first pausa"+ QString::number(this->cur_task.first_delay) << endl;
-  cur_thread->msleep(this->cur_task.first_delay);
-  qDebug () << "player play" << endl;
-  this->playlist = new QMediaPlaylist();
-  this->playlist->addMedia(QUrl::fromLocalFile(this->cur_task.audio_file_path));
-  this->playlist->setPlaybackMode(QMediaPlaylist::Loop);
-  this->player = new QMediaPlayer();
-  this->player->setPlaylist(this->playlist);
-  this->player->setVolume(this->cur_task.volume);
-  this->player->play();
+  qDebug () << m_task.audio_file_path;
 
+  QThread::currentThread()->msleep ( m_task.first_delay );
+  m_player->play();
+
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
-void progamPlayer::stop()
+void SingleSoundPlayer::stop()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
-  qDebug () << "player stop" << endl;
+  qDebug () << m_task.audio_file_path;
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
-void progamPlayer::pause()
+void SingleSoundPlayer::pause()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
-  qDebug () << "player pause" << endl;
+  qDebug () << m_task.audio_file_path;
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }

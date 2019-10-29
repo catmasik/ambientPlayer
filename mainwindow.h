@@ -5,7 +5,8 @@
 #include <QString>
 #include <QMediaPlayer>
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 

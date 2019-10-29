@@ -3,8 +3,9 @@
 #include <QObject>
 #include <QMediaPlaylist>
 #include <QMediaPlayer>
+#include <QScopedPointer>
 
-struct audio_task
+struct AudioTaskConfig
 {
   QString audio_file_path;  // путь к аудиофайлу
   int repeatability;  //( 0 - бесконечно, 1- 1 раз и тд.  )
@@ -14,16 +15,16 @@ struct audio_task
 };
 
 
-class progamPlayer : public QObject    /* врапер мультимедиа-плеера */
+class SingleSoundPlayer : public QObject    /* врапер мультимедиа-плеера */
 {
   Q_OBJECT
 
 public:
-  progamPlayer ( audio_task task );
-  ~progamPlayer();
-  audio_task cur_task ;
-  QMediaPlayer *player;
-  QMediaPlaylist *playlist;
+  SingleSoundPlayer ( AudioTaskConfig task );
+  ~SingleSoundPlayer();
+  AudioTaskConfig m_task ;
+  QScopedPointer<QMediaPlaylist> m_playlist;
+  QScopedPointer<QMediaPlayer> m_player;
 
 public slots:
   void play();

@@ -8,68 +8,72 @@
 #include <QDebug>
 
 
-playersDirector::playersDirector ()
+PlayersDirector::PlayersDirector ()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
-
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
 
 
-playersDirector::~playersDirector()
+PlayersDirector::~PlayersDirector()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
 
+  emit stopAllPlayers();
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
 
-void playersDirector::createPleyers()
+void PlayersDirector::createPlayers()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
-  qDebug () << "director create players" << endl;
-  QVector<audio_task> tasks_vector;
+  QVector<AudioTaskConfig> tasks_vector;
   QString file_name = "program_player.cfg";
-  tasks_vector = playersDirector::loadPlayersArray ( file_name );
-  int loop_cnt = 0;
-  foreach( audio_task cur_task, tasks_vector ){
-         qDebug () << "create player" << endl;
-        progamPlayer* cur_player = new progamPlayer(cur_task);
-        connect(this, SIGNAL(playAllPlayers()), cur_player, SLOT(play()));
-        connect(this, SIGNAL(pauseAllPlayers()), cur_player, SLOT(pause()));
-        connect(this, SIGNAL(stopAllPlayers()), cur_player, SLOT(stop()));
-        QThread* thread = new QThread;
-        cur_player->moveToThread(thread);
+  tasks_vector = PlayersDirector::loadPlayersArray ( file_name );
+
+  foreach ( AudioTaskConfig cur_task, tasks_vector )
+  {
+    qDebug () << "create player:" << cur_task.audio_file_path;
+    auto* player = new SingleSoundPlayer ( cur_task );
+    auto* thread = new QThread ;
+    player->moveToThread ( thread );
+    connect ( this, SIGNAL ( playAllPlayers() ), player, SLOT ( play() ) );
+    connect ( this, SIGNAL ( pauseAllPlayers() ), player, SLOT ( pause() ) );
+    connect ( this, SIGNAL ( stopAllPlayers() ), player, SLOT ( stop() ) );
+
         thread->start();
-        loop_cnt++;
         //if(loop_cnt==2){continue;}
 
   }
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
-void playersDirector::play()
+void PlayersDirector::play()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
-  qDebug () << "director switch play all players" << endl;
   emit  playAllPlayers();
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
-void playersDirector::pause()
+void PlayersDirector::pause()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
   emit  pauseAllPlayers();
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
 
-void playersDirector::stop()
+void PlayersDirector::stop()
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
   emit  stopAllPlayers();
-
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
 
-QVector<audio_task> playersDirector::loadPlayersArray ( QString file_name )
+QVector<AudioTaskConfig> PlayersDirector::loadPlayersArray ( QString file_name )
 {
   qDebug () << "-> " << __PRETTY_FUNCTION__;
   QDir cur_dir = QDir::currentPath();
   QString fileName = cur_dir.filePath ( file_name );
   QFile inputFile ( fileName );
 
-  QVector<audio_task> stream_vector;
+  QVector<AudioTaskConfig> stream_vector;
 
   if ( inputFile.open ( QIODevice::ReadOnly ) )
   {
@@ -92,7 +96,7 @@ QVector<audio_task> playersDirector::loadPlayersArray ( QString file_name )
       }
 
       //file_name;repeatability;first_delay;delay;volume
-      audio_task cur_stream; // инициализируем структуры для хранения задач
+      AudioTaskConfig cur_stream; // инициализируем структуры для хранения задач
       cur_stream.audio_file_path = cur_param_arr[0];
       cur_stream.repeatability = cur_param_arr[1].toInt();
       cur_stream.first_delay = cur_param_arr[2].toULong();
@@ -106,5 +110,6 @@ QVector<audio_task> playersDirector::loadPlayersArray ( QString file_name )
     inputFile.close();
   }
 
+  qDebug () << "<- " << __PRETTY_FUNCTION__;
   return  stream_vector;
 }

@@ -3,16 +3,16 @@
 #include <QObject>
 #include  "programplayer.h"
 
-class playersDirector : public
+class PlayersDirector : public
   QObject   /* класс который запускает враперы плееров */
 {
   Q_OBJECT
 
 public:
-  playersDirector ();
-  ~playersDirector();
-  QVector<audio_task> loadPlayersArray ( QString file_name );
-  void createPleyers();
+  PlayersDirector ();
+  ~PlayersDirector();
+  QVector<AudioTaskConfig> loadPlayersArray ( QString file_name );
+  void createPlayers();
   void play();
   void pause();
   void stop();
