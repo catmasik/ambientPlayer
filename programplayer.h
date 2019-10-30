@@ -30,6 +30,7 @@ public slots:
   void play();
   void stop();
   void pause();
+  void restart(QMediaPlayer::State state);
 
 };
 
