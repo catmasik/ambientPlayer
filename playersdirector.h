@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include  "programplayer.h"
+#include  "audiothread.h"
 
 class PlayersDirector : public
   QObject   /* класс который запускает враперы плееров */

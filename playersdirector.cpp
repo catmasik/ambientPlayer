@@ -4,7 +4,6 @@
 #include <QVector>
 #include <QTextStream>
 #include "playersdirector.h"
-#include "programplayer.h"
 #include <QDebug>
 
 
@@ -29,20 +28,13 @@ void PlayersDirector::createPlayers()
   QVector<AudioTaskConfig> tasks_vector;
   QString file_name = "program_player.cfg";
   tasks_vector = PlayersDirector::loadPlayersArray ( file_name );
-
+  QVector<AudioThread*> audio_threads;
   foreach ( AudioTaskConfig cur_task, tasks_vector )
   {
     qDebug () << "create player:" << cur_task.audio_file_path;
-    auto* player = new SingleSoundPlayer ( cur_task );
-    auto* thread = new QThread ;
-    player->moveToThread ( thread );
-    connect ( this, SIGNAL ( playAllPlayers() ), player, SLOT ( play() ) );
-    connect ( this, SIGNAL ( pauseAllPlayers() ), player, SLOT ( pause() ) );
-    connect ( this, SIGNAL ( stopAllPlayers() ), player, SLOT ( stop() ) );
-
-        thread->start();
-        //if(loop_cnt==2){continue;}
-
+    auto cur_thread = new AudioThread( cur_task );
+    connect ( this, SIGNAL ( playAllPlayers() ), cur_thread, SLOT ( play() ) );
+    audio_threads.push_back(cur_thread );
   }
   qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
@@ -71,6 +63,7 @@ QVector<AudioTaskConfig> PlayersDirector::loadPlayersArray ( QString file_name )
   qDebug () << "-> " << __PRETTY_FUNCTION__;
   QDir cur_dir = QDir::currentPath();
   QString fileName = cur_dir.filePath ( file_name );
+  qDebug () << "read_config from:" << fileName;
   QFile inputFile ( fileName );
 
   QVector<AudioTaskConfig> stream_vector;
@@ -99,8 +92,8 @@ QVector<AudioTaskConfig> PlayersDirector::loadPlayersArray ( QString file_name )
       AudioTaskConfig cur_stream; // инициализируем структуры для хранения задач
       cur_stream.audio_file_path = cur_param_arr[0];
       cur_stream.repeatability = cur_param_arr[1].toInt();
-      cur_stream.first_delay = cur_param_arr[2].toULong();
-      cur_stream.delay = cur_param_arr[3].toULong();
+      cur_stream.first_delay = cur_param_arr[2];
+      cur_stream.delay = cur_param_arr[3];
       cur_stream.volume = cur_param_arr[4].toInt();
       stream_vector.append ( cur_stream );
       //int temp = 0;
