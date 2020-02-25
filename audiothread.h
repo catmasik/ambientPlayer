@@ -23,18 +23,20 @@ class AudioThread : public QThread
     Q_OBJECT
 public:
     explicit AudioThread( AudioTaskConfig t_conf, QObject *parent = 0);
-    void __stdcall syncFunc(HSYNC handle, DWORD channel, DWORD data, void *user);
     AudioTaskConfig task_conf ;
     bool playing;
     void run();
     long convertCfgTimeoutToMs(QString cfg_timeout);
+    QTimer *timer;
+    void sendEndSignalToOwnThread();
 
 private:
     unsigned long chan;
-    QTimer *t;
+
 signals:
     void endOfPlayback();
     void curPos(double Position, double Total);
+    void programNextStart();
 public slots:
     void play();
     void pause();
@@ -42,5 +44,7 @@ public slots:
     void stop();
     void restartByTimer();
     void changePosition(int position);
+
+    void programStart();
 };
 #endif // AUDIOTHREAD_H

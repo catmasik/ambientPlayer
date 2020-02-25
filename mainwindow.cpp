@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "bass.h"
 
+
 //BASS FX 2.4.12.1 An extension providing several effects, including reverse playback and tempo & pitch
 
 
@@ -26,4 +27,18 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QScopedPointer<PlayersDirector> pd ( new PlayersDirector () );
+    pd->createPlayers();
+    pd->play();
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+     qDebug () << "-> " << __PRETTY_FUNCTION__;
+    pd->pause();
+     qDebug () << "<- " << __PRETTY_FUNCTION__;
 }
