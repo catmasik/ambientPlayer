@@ -8,19 +8,14 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    pd (new PlayersDirector)
 {
     ui->setupUi(this);
-
-    /*BASS_Init (-1, 44100, 0, 0, NULL);
-    DWORD stream;
-    char filename[] = "c:/Downloads/english.mp3";
-    stream = BASS_StreamCreateFile(FALSE, filename, 0, 0, 0);
-    BASS_DX8_DISTORTION* distortion = new BASS_DX8_DISTORTION();
-    int fxHandle = BASS_ChannelSetFX(stream, BASS_FX_DX8_DISTORTION, 0);
-    BASS_FXSetParameters(fxHandle, distortion);
-    BASS_ChannelPlay(stream,TRUE);*/
-
+    RegisterHotKey((HWND)MainWindow::winId(),100,MOD_CONTROL,VK_LEFT );
+    RegisterHotKey((HWND)MainWindow::winId(),101,MOD_CONTROL,VK_UP );
+    RegisterHotKey((HWND)MainWindow::winId(),102,MOD_CONTROL,VK_DOWN );
+    connect (this, SIGNAL(PlayersDirector::volumeChanged(int)), this, SLOT(MainWindow::volumeChanged(int)));
 
 }
 
@@ -29,16 +24,38 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+
+bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
+{
+    Q_UNUSED(eventType)
+    Q_UNUSED(result)
+    MSG* msg = reinterpret_cast<MSG*>(message);
+    if(msg->message == WM_HOTKEY){
+        switch(msg->wParam){
+            case 100:  pd->pause(); break;
+            case 101:  pd->volumeUp(); break;
+            case 102:  pd->volumeDown(); break;
+        }
+        return true;
+    }
+    return false;
+}
+
+
 void MainWindow::on_pushButton_clicked()
 {
-    QScopedPointer<PlayersDirector> pd ( new PlayersDirector () );
-    pd->createPlayers();
     pd->play();
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-     qDebug () << "-> " << __PRETTY_FUNCTION__;
     pd->pause();
-     qDebug () << "<- " << __PRETTY_FUNCTION__;
+}
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+    pd->VolumeSliderValueChanged(value);
+}
+void MainWindow::volumeChanged(int volume){
+     ui->horizontalSlider->setValue(volume);
 }

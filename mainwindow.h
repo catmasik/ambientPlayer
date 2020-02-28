@@ -17,12 +17,19 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-
+    void volumeChanged(int volume);
     void on_pushButton_2_clicked();
+    void on_horizontalSlider_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;
     QScopedPointer<PlayersDirector> pd;
+
+protected:
+    bool nativeEvent(const QByteArray &eventType, void *message, long *result);
+
 };
+
+
 
 #endif // MAINWINDOW_H

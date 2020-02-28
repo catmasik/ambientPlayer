@@ -2,7 +2,6 @@
 #include <QRegExp>
 
 bool endOfMusic;
-
 void __stdcall syncFunc(HSYNC handle, DWORD channel, DWORD data, void *a_thread)
 {
     AudioThread * audio_thread  = (AudioThread *) a_thread;
@@ -13,7 +12,7 @@ AudioThread::AudioThread(AudioTaskConfig t_conf, QObject *parent) :
     QThread(parent), task_conf(t_conf)
 {
     if (!BASS_Init(-1, 44100, 0, nullptr, nullptr)){
-        //qDebug() << "Cannot initialize device";
+        qDebug() << "Cannot initialize device";
     }
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(restartByTimer()));
@@ -21,53 +20,58 @@ AudioThread::AudioThread(AudioTaskConfig t_conf, QObject *parent) :
     endOfMusic = true;
 }
 
-void AudioThread::play()
+void AudioThread::play(int play_mode)
 {
-    BASS_ChannelStop(chan);
-    if (!(chan = BASS_StreamCreateFile(false, task_conf.audio_file_path.toLatin1(), 0, 0, 0))
-        && !(chan = BASS_MusicLoad(false, task_conf.audio_file_path.toLatin1(), 0, 0, BASS_MUSIC_RAMP, 1))){
-            //qDebug() << "Can't play file";
-    }else
-    {
-        endOfMusic = false;
-        float cur_volume = float (task_conf.volume)/100;
-        BASS_ChannelSetAttribute(chan, BASS_ATTRIB_VOL, cur_volume );
-        //BASS_ChannelSetSync(chan, BASS_SYNC_END, 0, &syncFunc, &task_conf);
-        BASS_ChannelSetSync(chan, BASS_SYNC_END, 0, &syncFunc, this);
-
-        long first_delay  = this->convertCfgTimeoutToMs(task_conf.first_delay);
-        if ( first_delay == 0  ){
-            BASS_ChannelPlay(chan, true);
-            playing = true;
-            ////qDebug() << "playing start"<< task_conf.audio_file_path;
+    //BASS_ChannelStop(chan);
+    if ( play_mode == STOP_MODE ) {
+        if (!(chan = BASS_StreamCreateFile(false, task_conf.audio_file_path.toLatin1(), 0, 0, 0))
+            && !(chan = BASS_MusicLoad(false, task_conf.audio_file_path.toLatin1(), 0, 0, BASS_MUSIC_RAMP, 1))){
+                qDebug() << "Can't play file";
         }else{
-            timer->start(first_delay*100);
-            //////qDebug() << "playing delayed"<< first_delay;
+            endOfMusic = false;
+            float cur_volume = float (task_conf.volume)/100;
+            BASS_ChannelSetAttribute(chan, BASS_ATTRIB_VOL, cur_volume );
+            //BASS_ChannelSetSync(chan, BASS_SYNC_END, 0, &syncFunc, &task_conf);
+            BASS_ChannelSetSync(chan, BASS_SYNC_END, 0, &syncFunc, this);
+
+            long first_delay  = this->convertCfgTimeoutToMs(task_conf.first_delay);
+            if ( first_delay == 0  ){
+                BASS_ChannelPlay(chan, true);
+                playing = true;
+                ////qDebug() << "playing start"<< task_conf.audio_file_path;
+            }else{
+                timer->start(first_delay*100);
+                //////qDebug() << "playing delayed"<< first_delay;
+            }
+
         }
+    }else{
+        if ( play_mode == PAUSE_MODE ) {
+            if (timer_was_active){
+                timer->start();
+            }else{
+                BASS_ChannelPlay(chan, false);
+            }
 
+        }
     }
+
 }
 
-void AudioThread::pause()
+void AudioThread::pause(int mode)
 {
-    //BASS_ChannelPause(chan);
-    //timer->stop();
-    //playing = false;
-    qDebug() << "cach pause signal "<< task_conf.audio_file_path;
-}
-
-void AudioThread::resume()
-{
-    if (!BASS_ChannelPlay(chan, false)){
-        //qDebug() << "Error resuming";
-    }else
-    {
-        //t->start(98);
-        playing = true;
+    if (timer->isActive()){
+        int remaining = timer->remainingTime();
+        timer->stop();
+        timer->setInterval(remaining);
+        timer_was_active =1;
+    }else{
+        timer_was_active =0;
     }
+    BASS_ChannelPause(chan);
 }
 
-void AudioThread::stop()
+void AudioThread::stop(int mode)
 {
     BASS_ChannelStop(chan);
     //t->stop();

@@ -6,6 +6,12 @@
 #include <QTimer>
 #include "bass.h"
 
+
+#define STOP_MODE 0
+#define PLAY_MODE 1
+#define PAUSE_MODE 2
+
+
 struct AudioTaskConfig
 {
   QString audio_file_path;  // путь к аудиофайлу
@@ -29,22 +35,21 @@ public:
     long convertCfgTimeoutToMs(QString cfg_timeout);
     QTimer *timer;
     void sendEndSignalToOwnThread();
+    unsigned long chan;
 
 private:
-    unsigned long chan;
+    int timer_was_active;
 
 signals:
     void endOfPlayback();
     void curPos(double Position, double Total);
     void programNextStart();
 public slots:
-    void play();
-    void pause();
-    void resume();
-    void stop();
+    void play(int mode);
+    void pause(int mode);
+    void stop(int mode);
     void restartByTimer();
     void changePosition(int position);
-
     void programStart();
 };
 #endif // AUDIOTHREAD_H
